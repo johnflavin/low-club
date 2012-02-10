@@ -1,0 +1,9 @@
+Low Club
+John Flavin
+
+In Schuster Rules Spades, eveyone throws their lowest club on the first trick. The question is: Given that my lowest club is X, how likely am I to win? Or, since these odds are only important when trying to make a Nil bid, the better question is: How likely am I to lose?
+
+The program simply randomizes a 'deck' of 52 integers, deals them out, sees what every person's lowest club is, then counts how often each card wins or loses.
+
+USAGE
+I don't remember this. I'll update soon after I read through the code.

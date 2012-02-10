@@ -1,5 +1,6 @@
-Low Club
+Low Club 
 John Flavin
+Requires at least Python 2.7; compatible with Python 3
 
 In Schuster Rules Spades, eveyone throws their lowest club on the first trick. The question is: Given that my lowest club is X, how likely am I to win? Or, since these odds are only important when trying to make a Nil bid, the better question is: How likely am I to lose?
 
@@ -9,5 +10,4 @@ USAGE
 Pass the order of magnitude of execution to the command line.
 If you want to run one thousand card games, pass 3, i.e. 1000=10**3.
 
-THIS VERSION
-Outputs only to the screen. Next version will output a CSV-formatted table.
+Output prints to screen. To output to a file, pass '-f'. This will put the results in a comma-separated value file 'results.csv'. To output to a different file, pass '-f --name <filename>'.

@@ -1,5 +1,6 @@
 from random import shuffle
 import sys
+import argparse
 
 
 class SpadesGame:
@@ -9,7 +10,7 @@ class SpadesGame:
 		self.hands = self.deal_hands()
 
 	def deal_hands(self):
-		deck = range(52)
+		deck = list(range(52))
 		# I used to shuffle 7 times, but shuffle is slooooooooow.
 		# for i in range(7): shuffle( deck )
 		shuffle(deck)
@@ -20,10 +21,19 @@ class SpadesGame:
 		return hands
 
 
-try:
-	runs = 10**int(sys.argv[1])
-except:
-	sys.exit('Give the order of magnitude of the number of runs as an argument')
+parser = argparse.ArgumentParser(description='Runs a bunch of spades hands and keeps statistics on wins/losses of low clubs.')
+
+parser.add_argument('n', type=int, help='Order of magnitude of runs. Will run 10**n hands.')
+parser.add_argument('--name', type=str, default='results.csv', \
+					help='Write to the specified file (if -f is set). If no filename is specified, writes to "results.csv".')
+parser.add_argument('-f', action='store_true', default=False, \
+					help='Write results to a file if set.')
+
+args = parser.parse_args(sys.argv[1:])
+
+runs = 10**args.n
+filename = args.name
+write = args.f
 
 club_wins = [0]*13
 club_losses = [0]*13
@@ -37,7 +47,7 @@ for iters in range(runs):
 	low_cards = [min(hand) for hand in game.hands]
 
 	#Keep only clubs. (For our purposes clubs are integers 0--12.)
-	low_clubs = filter(lambda card: card<13, low_cards)
+	low_clubs = [card for card in low_cards if card<13]
 
 	#The highest club is the winner
 	winner = max(low_clubs)
@@ -49,14 +59,28 @@ for iters in range(runs):
 	for card in low_clubs:
 		club_losses[ card ] += 1
 
-print "We ran {} hands. Low club stats are:".format(runs)
+# Format the results
+column_titles = ['low club','wins','losses','win v loss %\n']
 card_names = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
+win_pct = [0]*13
 for i in range(13):
-	print '{} won {} times and lost {} times'.format(card_names[i],club_wins[i],club_losses[i])
-
 	if club_wins[i] != 0 or club_losses[i] != 0:
-		win_pct = 100.0*float(club_wins[i])/float(club_wins[i]+club_losses[i])
+		win_pct[i] = 100.0*float(club_wins[i])/float(club_wins[i]+club_losses[i])
 	else:
-		win_pct = float('nan')
+		win_pct[i] = float('nan')
+data_lines = list(zip(card_names,club_wins,club_losses,win_pct))
 
-	print "Percent won: {0:.3f}".format(win_pct)
+# Write results to a file
+if write:
+	with open(filename,'a') as f:
+		f.write('10^{},,,\n'.format(args.n))
+		f.write(','.join(column_titles))
+		for line in data_lines:
+			f.write('{0},{1},{2},{3:.3f}\n'.format(*list(line)))
+
+
+# Print results to screen
+print("We ran {} hands. Low club stats are:".format(runs))
+
+for line in data_lines:
+	print('{3:.2f}%\t{0} won {1} times and lost {2} times.'.format(*list(line)))

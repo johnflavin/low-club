@@ -6,4 +6,8 @@ In Schuster Rules Spades, eveyone throws their lowest club on the first trick. T
 The program simply randomizes a 'deck' of 52 integers, deals them out, sees what every person's lowest club is, then counts how often each card wins or loses.
 
 USAGE
-I don't remember this. I'll update soon after I read through the code.
+Pass the order of magnitude of execution to the command line.
+If you want to run one thousand card games, pass 3, i.e. 1000=10**3.
+
+THIS VERSION
+Outputs only to the screen. Next version will output a CSV-formatted table.

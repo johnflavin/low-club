@@ -1,16 +1,19 @@
-import cards
+from random import choice
 from sys import argv
 import argparse
 import csv
 
-
 class SpadesGame:
 	def __init__(self):
-		self.num_players = 4
-		self.cards_per_hand = 13
+		self.deck = list(range(52))
+		self.hands = [[self.deal_card() for card in range(13)] for player in range(4)]
 
-		deck = cards.Deck()
-		self.hands = deck.deal(self.num_players,self.cards_per_hand)
+	def deal_card(self):
+		card = choice(self.deck)
+		self.deck.remove(card)
+
+		return card
+
 
 
 parser = argparse.ArgumentParser(description='Runs a bunch of spades hands and keeps statistics on wins/losses of low clubs.')
@@ -86,7 +89,7 @@ for this_game in range(runs):
 	low_cards = [min(hand) for hand in game.hands]
 
 	#Keep only clubs.
-	low_clubs = [card for card in low_cards if card.suit==0]
+	low_clubs = [card for card in low_cards if card<13]
 
 	#The highest club is the winner
 	winner = max(low_clubs)
@@ -106,8 +109,12 @@ for i in range(13):
 	else:
 		win_pct[i] = float('nan')
 
-line_out += '\nwins,'+','.join(club_wins)+'\nlosses,'+','.join(club_losses) \
-			+'\nwin %'+','.join(win_pct)
+titles = ['wins','losses','win %']
+matrices = [club_wins,club_losses,win_pct]
+for i in range(3):
+	line_out += '\n'+titles[i]+','+\
+				','.join( [str(num) for num in matrices[i]] )
+
 
 # Write results to a file
 print('Writing results to file')

@@ -10,4 +10,4 @@ USAGE
 Pass the order of magnitude of execution to the command line.
 If you want to run one thousand card games, pass 3, i.e. 1000=10**3.
 
-Output prints to screen. To output to a file, pass '-f'. This will put the results in a comma-separated value file 'results.csv'. To output to a different file, pass '-f --name <filename>'.
+Output is written to a comma-separated value file 'results.csv'. To output to a different file, run with '--name <filename>'. Before running any games, this file is checked to read in any previous statistics (if the file exists).

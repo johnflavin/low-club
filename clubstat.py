@@ -87,18 +87,20 @@ for this_game in range(runs):
 
 	##########
 	# Get lists of each player's clubs and spades
-	hands_clubs = [[card for card in hand if card<13] for hand in game.hands]
-	hands_spades = [[card for card in hand if card>38] for hand in game.hands]
+	#hands_clubs = [[card for card in hand if card<13] for hand in game.hands]
+	#hands_spades = [[card for card in hand if card>38] for hand in game.hands]
 
 	# Find each player's low club
-	low_clubs = [min(clubs) for clubs in hands_clubs if len(clubs)>0]
+	low_cards = [min(hand) for hand in game.hands]
+	low_clubs = [card for card in low_cards if card<13]
 
 	##########
 	# All Spades Check
 	# If any player has no clubs, we check to see if some player has all spades.
+	# (This is acheived by checking if their lowest card is 39, the 2 of spades.)
 	# If this is true, we simply do not mark any club as 'winner', but we do
 	# mark all the other clubs as 'loser'.
-	if len(low_clubs) < 4 and any([len(spades)==13 for spades in hands_spades]):
+	if len(low_clubs) < 4 and any([card==39 for card in low_cards]):
 		pass
 	else:
 		# The highest club is the winner

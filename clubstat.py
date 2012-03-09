@@ -1,4 +1,4 @@
-from random import shuffle
+import cards
 import sys
 import argparse
 
@@ -6,19 +6,10 @@ import argparse
 class SpadesGame:
 	def __init__(self):
 		self.num_players = 4
-		self.cards_in_hand = 13
-		self.hands = self.deal_hands()
+		self.cards_per_hand = 13
 
-	def deal_hands(self):
-		deck = list(range(52))
-		# I used to shuffle 7 times, but shuffle is slooooooooow.
-		# for i in range(7): shuffle( deck )
-		shuffle(deck)
-
-		hands = [ deck[player*self.cards_in_hand:(player+1)*self.cards_in_hand] \
-				for player in range(self.num_players)]
-
-		return hands
+		deck = cards.Deck()
+		self.hands = deck.deal(self.num_players,self.cards_per_hand)
 
 
 parser = argparse.ArgumentParser(description='Runs a bunch of spades hands and keeps statistics on wins/losses of low clubs.')
@@ -26,15 +17,15 @@ parser = argparse.ArgumentParser(description='Runs a bunch of spades hands and k
 parser.add_argument('n', type=int, help='Order of magnitude of runs. Will run 10**n hands.')
 parser.add_argument('--name', type=str, default='results.csv', \
 					help='Write to the specified file (if -f is set). If no filename is specified, writes to "results.csv".')
-parser.add_argument('-f', action='store_true', default=False, \
-					help='Write results to a file if set.')
 
 args = parser.parse_args(sys.argv[1:])
 
 runs = 10**args.n
 filename = args.name
-write = args.f
+#write = args.f
 
+##########
+# Initialize the arrays to hold wins and losses for each card
 club_wins = [0]*13
 club_losses = [0]*13
 
